@@ -129,7 +129,7 @@ class PageTwo(tk.Frame):
         button_close.pack()
 
         
-        f= Figure(figsize=(5,5), dpi=100)
+        f= figure(figsize=(5,5), dpi=100)
         
         a=f.add_subplot(111)
         
