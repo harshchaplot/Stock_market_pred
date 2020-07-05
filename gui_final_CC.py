@@ -61,7 +61,7 @@ class StartPage(tk.Frame):
             tk.Frame.__init__(self, parent) 
             
             
-            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/INTERN/wall2.png")
+            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/Chinmay/wall2.png")
             BGlabel = tk.Label(self,image=logo)
             BGlabel.image = logo
             BGlabel.place(relwidth=1,relheight=1)
@@ -127,12 +127,13 @@ class Page1(tk.Frame):
         #button4.place(relx=0.39, rely= 0.5, relwidth= 0.2, relheight= 0.15)
         
         entry=tk.Entry(self,font=20)
+        print(entry.get())
         entry.place(relx=0.3, rely= 0.6,relwidth=0.65, relheight=0.3)
     
         button5 = ttk.Button(self, text= "Display", command= lambda: self.tickval(entry.get()))
         button5.place(relx=0.1, rely= 0.6, relwidth= 0.15, relheight= 0.1)
         
-        print(self.tickval(entry.get()))
+        # print(self.tickval(entry.get()))
         
         
         #
@@ -143,6 +144,8 @@ class Page1(tk.Frame):
     def tickval(self, entry):
         #df = web.DataReader(ticker,'yahoo',start='2019-11-01',end='2019-12-17')
         name=entry
+        print('Printing name')
+        print(name)
         mycompany(name)
         
         

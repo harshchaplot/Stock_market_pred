@@ -51,13 +51,15 @@ def vis(train_data,valid_data):
 def mycompany(company):
     #read the file
     global company_df
-    company_df = web.DataReader(company,'yahoo',start='2012-01-01',end='2019-12-17')
-    return company_df
+    print('Training model for ',end=' ')
+    print(company)
+    company_df = web.DataReader('INPX','yahoo',start='2012-01-01',end='2019-12-17')
+    myfunc()
     
 def myfunc():
     #print the dataframe
     
-    df= mycompany()
+    df= company_df
     
     #To get index value 'Date' into a column value
     #df.reset_index(inplace=True,drop=False)
@@ -227,4 +229,5 @@ def history(df):
     plt.ylabel('Closing price ($)',fontsize=18)
     plt.show()
     
+# mycompany('INPX')
 # myfunc()
