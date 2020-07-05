@@ -4,7 +4,7 @@ import os
 import tkinter as tk 
 from tkinter import ttk 
 from ML_MODEL_CC import *
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 
 
@@ -61,7 +61,7 @@ class StartPage(tk.Frame):
             tk.Frame.__init__(self, parent) 
             
             
-            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/Chinmay/wall2.png")
+            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/internship/summer_intern/wall2.png")
             BGlabel = tk.Label(self,image=logo)
             BGlabel.image = logo
             BGlabel.place(relwidth=1,relheight=1)
@@ -103,35 +103,48 @@ class Page1(tk.Frame):
     
     def __init__(self, parent, controller): 
         
-        tk.Frame.__init__(self, parent, bg='black') 
+        tk.Frame.__init__(self, parent, bg='#044A80') 
         
         
         #logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/INTERN/market2.png")
         #photoimage = logo.subsample(1 ,1) 
 
-        button_train = tk.Button(self, text ="Train Model", command = self.func) 
-        button_train.place(relx=0.36, rely= 0.1, relwidth= 0.25, relheight= 0.15)
+        #button_train = tk.Button(self, text ="Train Model", command = self.func) 
+        #button_train.place(relx=0.36, rely= 0.1, relwidth= 0.25, relheight= 0.15)
         #button_train.config(image=photoimage)
     
+        entry=tk.Entry(self,font=20, borderwidth=5)
+        #entry.grid(row=0, column=0, columnspan=3, sticky="we")
+        entry.place(x=80, y= 40, width=850, height=45)
         
-        button_back = ttk.Button(self, text ="Exit", command = close_window) 
-        button_back.place(relx=0.7, rely= 0.5, relwidth= 0.2, relheight= 0.15)
+        button_tick = ttk.Button(self, text= "Go", command= lambda: self.tickval(entry.get()))
+        #button_tick.grid(row=0, column=3, padx=30, pady=30)
+        button_tick.place(relx=0.78, y= 40,relwidth=0.16, height=45)
+        
+        button_hist = ttk.Button(self, text ="Historical data of the Company", command = self.showHistory)
+        #button_hist.grid(row=1, column=0, padx=30, pady=30)
+        button_hist.place(x=80, y= 125, relwidth=0.16, height=45)
+        
+        button_pred = ttk.Button(self, text= "Display the predictions graph", command = self.preds)
+        #button_pred.grid(row=1, column=1, padx=30, pady=30)
+        button_pred.place(x=395, y= 125, width= 220, height=45)
+      
+        button_def = ttk.Button(self, text= "Ticker Values Information", command = self.show_ticker)
+        #button_def.grid(row=1, column=2, padx=30, pady=30)
+        button_def.place(x=710, y= 125, width=220 , height= 45)
+      
+        button_exit = ttk.Button(self, text ="Exit", command = close_window) 
+        #button_exit.grid(row=1, column=3, padx=30, pady=30)
+        button_exit.place(relx=0.78, y=125,relwidth=0.16, height=45)
         
         #label = ttk.Label(self, text="After pressing Train Model, wait for a minute for the model to train", font = LARGEFONT) 
         #label.place(relx=0.24, rely=0.8)
         
-        #button3 = ttk.Button(self, text ="Load historical data of the stock", command = self.showHistory)
-        #button3.place(relx=0.1, rely= 0.5, relwidth= 0.2, relheight= 0.15)
-
-        #button4 = ttk.Button(self, text= "Display the predictions graph", command = self.preds)
-        #button4.place(relx=0.39, rely= 0.5, relwidth= 0.2, relheight= 0.15)
+        lower_frame=tk.Frame(self, bg='#A8D7FB', bd=50)
+        lower_frame.place(x=80, y=207, relwidth=0.884, relheight=0.67)
+       
+       
         
-        entry=tk.Entry(self,font=20)
-        print(entry.get())
-        entry.place(relx=0.3, rely= 0.6,relwidth=0.65, relheight=0.3)
-    
-        button5 = ttk.Button(self, text= "Display", command= lambda: self.tickval(entry.get()))
-        button5.place(relx=0.1, rely= 0.6, relwidth= 0.15, relheight= 0.1)
         
         # print(self.tickval(entry.get()))
         
@@ -147,18 +160,34 @@ class Page1(tk.Frame):
         print('Printing name')
         print(name)
         string,myDict = mycompany(name)
+        
+        global global_df
+        global validData
+        global trainData
+        validData = myDict["valid_data"]
+        trainData = myDict["train_data"]
+        global_df = myDict["df"]
+        pred_price = myDict["pred_price"]
+        
         if(string=='no'):
-        	myString = "Predicted price is " + str((myDict["pred_price"]))
-        	label = ttk.Label(self, text="No error, training the model", font = LARGEFONT) 
-        	label.place(relx=0.3, rely=0.9)
-        	label = ttk.Label(self, text=myString, font = LARGEFONT) 
-        	label.place(relx=0.6, rely=0.9)
+            myString = str((myDict["pred_price"]))
+            label = tk.Label(self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT) 
+            label.place(relx=0.3, rely=0.9)
+            label = tk.Label(self, text=myString, font = LARGEFONT, bg='#A8D7FB') 
+            label.place(relx=0.6, rely=0.9)
         else:
-        	label = ttk.Label(self, text="Please enter the name of the stock", font = LARGEFONT) 
-        	label.place(relx=0.3, rely=0.9)
+            label = tk.Label(self, text="Please enter the name of the company ticker", bg='#A8D7FB',font = LARGEFONT) 
+            label.place(relx=0.3, rely=0.9)
         
         
+    def show_ticker(self):
+                  
+        label = tk.Label(self, text="Ticker values of some companies for reference are: \n\nHero MotoCorp Limited:         HEROMOTOCO.NS\nTata Motors Limited:          TATAMOTORS.NS\nReliance Power Limited:          RPOWER.NS\nMahindra & Mahindra Limited:      M&M.NS\nInfosys Limited:          INFY.NS\nIndian Oil Corporation Limited:  IOC.NS\nNestle India Limited:          NESTLEIND.NS\nBosch Limited:             BOSCHLTD.NS\nGillette India Limited:          GILLETTE.BO\nBritannia Industries Limited:    BRITANNIA.BO\n"
+                         
+                         , bg='#A8D7FB',font = LARGEFONT, justify="left") 
+        label.place(x=85, y=210)
         
+            
 
         
     def func(self):
@@ -179,18 +208,47 @@ class Page1(tk.Frame):
         
     def showHistory(self):
         print('Showing historical data')
-        fig = Figure(figsize=(6,6))
+
+        fig = Figure(figsize=(5,5))
         a = fig.add_subplot(111)
-        a.history(global_df)
+        a.plot(global_df.Close)
         
-        canvas = FigureCanvasTkAgg(fig, master=self.window)
-        canvas.get_tk_widget().pack()
-        canvas.draw()
+        canvas1 = FigureCanvasTkAgg(fig, master=self)
+        canvas1.get_tk_widget().pack_forget()
+
+        canvas1.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        
+        canvas1.draw()
+        
+        toolbar = NavigationToolbar2Tk(canvas1, self)
+        toolbar.update()
+        canvas1._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
 
 
     def preds(self):
+        
         print('Showing predictions')
-        vis(trainData, validData)
+        fig = Figure(figsize=(5,5))
+        a = fig.add_subplot(111)
+        a.plot(trainData['Close'])
+        
+        b = fig.add_subplot(111)
+        b.plot(validData[['Close', 'Predictions']])
+        
+        
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.get_tk_widget().pack_forget()
+
+        canvas.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        canvas.draw()
+        
+        toolbar = NavigationToolbar2Tk(canvas, self)
+        toolbar.update()
+        canvas._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
+
+        #trainData['Close']
+        #validData[['Close', 'Predictions']]
+        #vis(trainData, validData)
 
 
 
