@@ -146,13 +146,16 @@ class Page1(tk.Frame):
         name=entry
         print('Printing name')
         print(name)
-        string = mycompany(name)
+        string,myDict = mycompany(name)
         if(string=='no'):
+        	myString = "Predicted price is " + str((myDict["pred_price"]))
         	label = ttk.Label(self, text="No error, training the model", font = LARGEFONT) 
-        	label.place(relx=0.3, rely=0.7)
+        	label.place(relx=0.3, rely=0.9)
+        	label = ttk.Label(self, text=myString, font = LARGEFONT) 
+        	label.place(relx=0.6, rely=0.9)
         else:
         	label = ttk.Label(self, text="Please enter the name of the stock", font = LARGEFONT) 
-        	label.place(relx=0.3, rely=0.7)
+        	label.place(relx=0.3, rely=0.9)
         
         
         
@@ -161,13 +164,14 @@ class Page1(tk.Frame):
     def func(self):
         print('Training model')                
         
-        pred_price,rel_quote2_close,valid_data,train_data,df = myfunc()
+        myDict = myfunc()
         global global_df
         global validData
         global trainData
-        validData = valid_data
-        trainData = train_data
-        global_df = df
+        validData = myDict["valid_data"]
+        trainData = myDict["train_data"]
+        global_df = myDict["df"]
+        pred_price = myDict["pred_price"]
         print(pred_price)
         
         

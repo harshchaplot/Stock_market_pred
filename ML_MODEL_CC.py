@@ -56,9 +56,9 @@ def mycompany(company):
     try:
         company_df = web.DataReader(company,'yahoo',start='2012-01-01',end='2019-12-17')
     except:
-        return 'error'
-    myfunc()
-    return 'no'
+        return 'error',{}
+    myDict = myfunc()
+    return 'no',myDict
     
 def myfunc():
     #print the dataframe
@@ -222,7 +222,8 @@ def myfunc():
     rel_quote2=web.DataReader('RELIANCE.NS','yahoo',start='2019-12-18',end='2019-12-18')
     print(rel_quote2['Close'])
 
-    return pred_price,rel_quote2['Close'],valid_data,train_data,df
+    pred_dict = {"pred_price":pred_price, "rel_quote2": rel_quote2['Close'], "train_data":train_data, "valid_data":valid_data, "df":df}
+    return pred_dict
 
 def history(df):
     #Plotting Closing Price wrt date
