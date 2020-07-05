@@ -146,7 +146,13 @@ class Page1(tk.Frame):
         name=entry
         print('Printing name')
         print(name)
-        mycompany(name)
+        string = mycompany(name)
+        if(string=='no'):
+        	label = ttk.Label(self, text="No error, training the model", font = LARGEFONT) 
+        	label.place(relx=0.3, rely=0.7)
+        else:
+        	label = ttk.Label(self, text="Please enter the name of the stock", font = LARGEFONT) 
+        	label.place(relx=0.3, rely=0.7)
         
         
         

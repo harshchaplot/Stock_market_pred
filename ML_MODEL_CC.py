@@ -53,8 +53,12 @@ def mycompany(company):
     global company_df
     print('Training model for ',end=' ')
     print(company)
-    company_df = web.DataReader('INPX','yahoo',start='2012-01-01',end='2019-12-17')
+    try:
+        company_df = web.DataReader(company,'yahoo',start='2012-01-01',end='2019-12-17')
+    except:
+        return 'error'
     myfunc()
+    return 'no'
     
 def myfunc():
     #print the dataframe
