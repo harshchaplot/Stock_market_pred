@@ -10,31 +10,31 @@ import matplotlib.pyplot as plt
 
 #setting figure size
 from matplotlib.pylab import rcParams
-#rcParams['figure.figsize'] = 20,10
-
-
-
-#conda install -c anaconda pandas-datareader
 
 
 #for normalizing data
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler(feature_range=(0, 1))
 
-from datetime import date, datetime, time, timedelta
 
 #Importing required libraries from sklearn
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
 
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
-from keras.models import model_from_json
-from sklearn.metrics import accuracy_score
 from sklearn.metrics import r2_score
 
 
+
+def history(df):
+    #Plotting Closing Price wrt date
+    plt.figure(figsize=(16,8))
+    plt.title('Close price history')
+    plt.plot(df.Close)
+    plt.xlabel('Date',fontsize=18)
+    plt.ylabel('Closing price ($)',fontsize=18)
+    plt.show()
 
 
 def vis(train_data,valid_data):
@@ -47,11 +47,12 @@ def vis(train_data,valid_data):
     plt.ylabel("Closing Price in USD")
     plt.show()
 
-
 def mycompany(company):
     #read the file
     global company_df
     print('Training model for ',end=' ')
+    global company1
+    company1= company
     print(company)
     try:
         company_df = web.DataReader(company,'yahoo',start='2012-01-01',end='2019-12-17')
@@ -69,8 +70,6 @@ def myfunc():
     #df.reset_index(inplace=True,drop=False)
     
     df.count()
-    
-    
     
     #Getting only the closing price 
     data=df.filter(['Close'])
@@ -125,12 +124,12 @@ def myfunc():
     model.add(Dense(1))
     
     # serialize model to JSON
-    model_json = model.to_json()
+    '''model_json = model.to_json()
     with open("model.json", "w") as json_file:
         json_file.write(model_json)
     # serialize weights to HDF5
     model.save_weights("model.h5")
-    print("Saved model to disk")
+    print("Saved model to disk")'''
     
     #Compiling the model
     model.compile(optimizer= 'adam', loss='mean_squared_error' )
@@ -195,13 +194,13 @@ def myfunc():
     print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
     
     '''
+    #Predicting the closing price using the closing price from 60 days
     
-    #Get get the quote
-    rel_quote=web.DataReader('RELIANCE.NS','yahoo',start='2012-01-01',end='2019-12-17')
-    
+    #Get the quote
+    rel_quote=web.DataReader(company1,'yahoo',start='2012-01-01',end='2019-12-17')
     new_df= rel_quote.filter(['Close'])
-    
     last_60_days = new_df[-60:].values
+    
     #Scale the data
     last_60_days_scaled=scaler.transform(last_60_days)
     
@@ -213,26 +212,17 @@ def myfunc():
     X_test=np.array(X_test)
     #Reshape the data
     X_test=np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+    
     #Get the models predicted price value
     pred_price= model.predict(X_test)
     pred_price= scaler.inverse_transform(pred_price)
     print(pred_price)
     
-    #Get get the quote
-    rel_quote2=web.DataReader('RELIANCE.NS','yahoo',start='2019-12-18',end='2019-12-18')
+    #Get the orignal closing price for comparison with predicted value
+    rel_quote2=web.DataReader(company1,'yahoo',start='2019-12-18',end='2019-12-18')
     print(rel_quote2['Close'])
 
     pred_dict = {"pred_price":pred_price, "rel_quote2": rel_quote2['Close'], "train_data":train_data, "valid_data":valid_data, "df":df}
-    return pred_dict
-
-def history(df):
-    #Plotting Closing Price wrt date
-    plt.figure(figsize=(16,8))
-    plt.title('Close price history')
-    plt.plot(df.Close)
-    plt.xlabel('Date',fontsize=18)
-    plt.ylabel('Closing price ($)',fontsize=18)
-    plt.show()
     
-# mycompany('INPX')
-# myfunc()
+    #Returning the value to GUI scrpit
+    return pred_dict

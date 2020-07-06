@@ -89,14 +89,6 @@ class StartPage(tk.Frame):
             button_close.place(relx=0.6, rely= 0.4, relwidth= 0.3, relheight= 0.15 )
             
             
-                ## button to show frame 2 with text layout2 
-                #         button2 = ttk.Button(self, text ="Page 2", 
-                #         command = lambda : controller.show_frame(Page2)) 
-        
-                # putting the button in its place by 
-                # using grid 
-    #         button2.grid(row = 2, column = 1, padx = 10, pady = 10) 
-
 
 # second window frame page1 
 class Page1(tk.Frame): 
@@ -137,13 +129,15 @@ class Page1(tk.Frame):
         #button_exit.grid(row=1, column=3, padx=30, pady=30)
         button_exit.place(relx=0.78, y=125,relwidth=0.16, height=45)
         
-        #label = ttk.Label(self, text="After pressing Train Model, wait for a minute for the model to train", font = LARGEFONT) 
-        #label.place(relx=0.24, rely=0.8)
         
         lower_frame=tk.Frame(self, bg='#A8D7FB', bd=50)
         lower_frame.place(x=80, y=207, relwidth=0.884, relheight=0.67)
        
-       
+        label = tk.Label(lower_frame, text="After pressing Go, wait for a minute for the model to train", bg='#A8D7FB', font = LARGEFONT) 
+        label.place(relx=0.2, rely=0.99)
+        label.after(30000, label.destroy)    # 1000ms
+
+        
         
         
         # print(self.tickval(entry.get()))
@@ -155,7 +149,6 @@ class Page1(tk.Frame):
     
     
     def tickval(self, entry):
-        #df = web.DataReader(ticker,'yahoo',start='2019-11-01',end='2019-12-17')
         name=entry
         print('Printing name')
         print(name)
@@ -171,21 +164,23 @@ class Page1(tk.Frame):
         
         if(string=='no'):
             myString = str((myDict["pred_price"]))
-            label = tk.Label(self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT) 
+            label = tk.Label(self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT)
+            #self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT
+           # label.config(self.lower_frame, text="The predicted price for " + str(name) + " is: ")
             label.place(relx=0.3, rely=0.9)
             label = tk.Label(self, text=myString, font = LARGEFONT, bg='#A8D7FB') 
             label.place(relx=0.6, rely=0.9)
         else:
-            label = tk.Label(self, text="Please enter the name of the company ticker", bg='#A8D7FB',font = LARGEFONT) 
+            label= tk.Label(self, text="Please enter the name of the company ticker", bg='#A8D7FB',font = LARGEFONT) 
             label.place(relx=0.3, rely=0.9)
         
         
     def show_ticker(self):
                   
-        label = tk.Label(self, text="Ticker values of some companies for reference are: \n\nHero MotoCorp Limited:         HEROMOTOCO.NS\nTata Motors Limited:          TATAMOTORS.NS\nReliance Power Limited:          RPOWER.NS\nMahindra & Mahindra Limited:      M&M.NS\nInfosys Limited:          INFY.NS\nIndian Oil Corporation Limited:  IOC.NS\nNestle India Limited:          NESTLEIND.NS\nBosch Limited:             BOSCHLTD.NS\nGillette India Limited:          GILLETTE.BO\nBritannia Industries Limited:    BRITANNIA.BO\n"
+        self.label1= tk.Label(self, text="Ticker values of some companies for reference are: \n\nHero MotoCorp Limited:         HEROMOTOCO.NS\nTata Motors Limited:          TATAMOTORS.NS\nReliance Power Limited:          RPOWER.NS\nMahindra & Mahindra Limited:      M&M.NS\nInfosys Limited:          INFY.NS\nIndian Oil Corporation Limited:  IOC.NS\nNestle India Limited:          NESTLEIND.NS\nBosch Limited:             BOSCHLTD.NS\nGillette India Limited:          GILLETTE.BO\nBritannia Industries Limited:    BRITANNIA.BO\n"
                          
                          , bg='#A8D7FB',font = LARGEFONT, justify="left") 
-        label.place(x=85, y=210)
+        self.label1.place(x=85, y=210)
         
             
 
@@ -213,16 +208,16 @@ class Page1(tk.Frame):
         a = fig.add_subplot(111)
         a.plot(global_df.Close)
         
-        canvas1 = FigureCanvasTkAgg(fig, master=self)
-        canvas1.get_tk_widget().pack_forget()
 
-        canvas1.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        self.canvas1 = FigureCanvasTkAgg(fig, master=self)
+        self.canvas1.get_tk_widget().place_forget()
+
+        self.canvas1.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        self.canvas1.draw()
         
-        canvas1.draw()
-        
-        toolbar = NavigationToolbar2Tk(canvas1, self)
+        toolbar = NavigationToolbar2Tk(self.canvas1, self)
         toolbar.update()
-        canvas1._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
+        self.canvas1._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
 
 
     def preds(self):
@@ -235,16 +230,15 @@ class Page1(tk.Frame):
         b = fig.add_subplot(111)
         b.plot(validData[['Close', 'Predictions']])
         
-        
-        canvas = FigureCanvasTkAgg(fig, master=self)
-        canvas.get_tk_widget().pack_forget()
+        self.canvas1.place_forget()
+        self.canvas1 = FigureCanvasTkAgg(fig, master=self)
 
-        canvas.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
-        canvas.draw()
+        self.canvas1.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        self.canvas1.draw()
         
-        toolbar = NavigationToolbar2Tk(canvas, self)
+        toolbar = NavigationToolbar2Tk(self.canvas1, self)
         toolbar.update()
-        canvas._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
+        self.canvas1._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
 
         #trainData['Close']
         #validData[['Close', 'Predictions']]
