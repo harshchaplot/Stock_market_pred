@@ -3,7 +3,7 @@ matplotlib.use('TkAgg')
 import os
 import tkinter as tk 
 from tkinter import ttk 
-from ML_MODEL_CC import *
+from ML_MODEL_FINAL import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 
@@ -61,7 +61,7 @@ class StartPage(tk.Frame):
             tk.Frame.__init__(self, parent) 
             
             
-            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/internship/summer_intern/wall2.png")
+            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/Chinmay/wall2.png")
             BGlabel = tk.Label(self,image=logo)
             BGlabel.image = logo
             BGlabel.place(relwidth=1,relheight=1)
@@ -135,7 +135,9 @@ class Page1(tk.Frame):
        
         label = tk.Label(lower_frame, text="After pressing Go, wait for a minute for the model to train", bg='#A8D7FB', font = LARGEFONT) 
         label.place(relx=0.2, rely=0.99)
-        label.after(30000, label.destroy)    # 1000ms
+        global basic_label
+        basic_label = label
+        # label.after(30000, label.destroy)    # 1000ms
 
         
         
@@ -149,6 +151,22 @@ class Page1(tk.Frame):
     
     
     def tickval(self, entry):
+        try:
+            self.canvas1.get_tk_widget().destroy()
+            tb1.destroy()
+        except:
+            pass
+
+        try:
+            self.canvas2.get_tk_widget().destroy()
+            tb2.destroy()
+        except:
+            pass
+
+        try:
+            self.label1.destroy()
+        except:
+            pass
         name=entry
         print('Printing name')
         print(name)
@@ -161,18 +179,23 @@ class Page1(tk.Frame):
         trainData = myDict["train_data"]
         global_df = myDict["df"]
         pred_price = myDict["pred_price"]
+        global label_me
+        try:
+            basic_label.destroy()
+        except:
+            pass
         
         if(string=='no'):
             myString = str((myDict["pred_price"]))
-            label = tk.Label(self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT)
+            label = tk.Label(self, text="The predicted price for " + str(name) + " is: "+myString,bg='#A8D7FB', font = LARGEFONT)
             #self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT
            # label.config(self.lower_frame, text="The predicted price for " + str(name) + " is: ")
-            label.place(relx=0.3, rely=0.9)
-            label = tk.Label(self, text=myString, font = LARGEFONT, bg='#A8D7FB') 
-            label.place(relx=0.6, rely=0.9)
+            label.place(relx=0.3, rely=0.8)
+            label_me = label
         else:
             label= tk.Label(self, text="Please enter the name of the company ticker", bg='#A8D7FB',font = LARGEFONT) 
             label.place(relx=0.3, rely=0.9)
+            label_me = label
         
         
     def show_ticker(self):
@@ -181,6 +204,22 @@ class Page1(tk.Frame):
                          
                          , bg='#A8D7FB',font = LARGEFONT, justify="left") 
         self.label1.place(x=85, y=210)
+        try:
+            self.canvas1.get_tk_widget().destroy()
+            tb1.destroy()
+        except:
+            pass
+
+        try:
+            self.canvas2.get_tk_widget().destroy()
+            tb2.destroy()
+        except:
+            pass
+
+        try:
+            label_me.destroy()
+        except:
+            pass
         
             
 
@@ -207,16 +246,33 @@ class Page1(tk.Frame):
         fig = Figure(figsize=(5,5))
         a = fig.add_subplot(111)
         a.plot(global_df.Close)
+        try:
+            self.label1.destroy()
+        except:
+            pass
+
+        try:
+            self.canvas2.get_tk_widget().destroy()
+            tb2.destroy()
+        except:
+            pass
+
+        try:
+            label_me.destroy()
+        except:
+            pass
         
 
         self.canvas1 = FigureCanvasTkAgg(fig, master=self)
-        self.canvas1.get_tk_widget().place_forget()
+        # self.canvas1.get_tk_widget().place_forget()
 
         self.canvas1.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
         self.canvas1.draw()
         
         toolbar = NavigationToolbar2Tk(self.canvas1, self)
         toolbar.update()
+        global tb1
+        tb1 = toolbar
         self.canvas1._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
 
 
@@ -229,16 +285,32 @@ class Page1(tk.Frame):
         
         b = fig.add_subplot(111)
         b.plot(validData[['Close', 'Predictions']])
-        
-        self.canvas1.place_forget()
-        self.canvas1 = FigureCanvasTkAgg(fig, master=self)
+        try:
+            self.label1.destroy()
+        except:
+            pass
 
-        self.canvas1.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
-        self.canvas1.draw()
+        try:
+            self.canvas1.get_tk_widget().destroy()
+            tb1.destroy()
+        except:
+            pass
+
+        try:
+            label_me.destroy()
+        except:
+            pass
         
-        toolbar = NavigationToolbar2Tk(self.canvas1, self)
-        toolbar.update()
-        self.canvas1._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
+        self.canvas2 = FigureCanvasTkAgg(fig, master=self)
+
+        self.canvas2.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        self.canvas2.draw()
+        
+        toolbar2 = NavigationToolbar2Tk(self.canvas2, self)
+        toolbar2.update()
+        global tb2
+        tb2 = toolbar2
+        self.canvas2._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
 
         #trainData['Close']
         #validData[['Close', 'Predictions']]
