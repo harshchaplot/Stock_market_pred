@@ -61,8 +61,8 @@ class StartPage(tk.Frame):
             tk.Frame.__init__(self, parent) 
             
             
-            # logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/internship/summer_intern/wall2.png")
-            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/Chinmay/wall2.png")
+            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/internship/summer_intern/wall2.png")
+            # logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/Chinmay/wall2.png")
             BGlabel = tk.Label(self,image=logo)
             BGlabel.image = logo
             BGlabel.place(relwidth=1,relheight=1)
