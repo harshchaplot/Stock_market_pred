@@ -61,7 +61,8 @@ class StartPage(tk.Frame):
             tk.Frame.__init__(self, parent) 
             
             
-            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/internship/summer_intern/wall2.png")
+            # logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/internship/summer_intern/wall2.png")
+            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/Chinmay/wall2.png")
             BGlabel = tk.Label(self,image=logo)
             BGlabel.image = logo
             BGlabel.place(relwidth=1,relheight=1)
@@ -144,21 +145,30 @@ class Page1(tk.Frame):
     
     
     def tickval(self, entry):
+        fh = False
+        fp = False
+        fl1 = False
         try:
             self.canvas_histroy.get_tk_widget().destroy()
             self.tb1.destroy()
+            fh = True
         except:
+            print('pass canvas_histroy')
             pass
 
         try:
-            self.canvas_.get_tk_widget().destroy()
+            self.canvas_pred_graph.get_tk_widget().destroy()
             self.tb2.destroy()
+            fp = True
         except:
+            print('pass canvas_pred_graph')
             pass
 
         try:
-            self.label1.destroy()
+            label_1.destroy()
+            fl1 = True
         except:
+            print('pass label_1')
             pass
         
         name=entry
@@ -185,36 +195,46 @@ class Page1(tk.Frame):
             label = tk.Label(self, text="The predicted price for " + str(name) + " is: "+myString,bg='#A8D7FB', font = LARGEFONT)
             #self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT
            # label.config(self.lower_frame, text="The predicted price for " + str(name) + " is: ")
-            label.place(relx=0.35, rely=0.88)
+            label.place(relx=0.35, rely=0.9)
             label_me = label
+            if fh:
+            	print('fh true')
+            	self.showHistory()
+            elif fp:
+            	print('fp true')
+            	self.preds()
+            elif fl1:
+            	print('fl1 true')
+            	self.show_ticker()
+            else:
+            	print('nothing')
         else:
-            label= tk.Label(self, text="Please enter the name of the company ticker", bg='#A8D7FB',font = LARGEFONT) 
-            label.place(relx=0.3, rely=0.9)
-            label_me = label
+        	label= tk.Label(self, text="Please enter the name of the company ticker", bg='#A8D7FB',font = LARGEFONT)
+        	label.place(relx=0.3, rely=0.9)
+        	label_me = label
         
         
     def show_ticker(self):
-                  
+
         self.label1= tk.Label(self, text="Ticker values of some companies for reference are: \n\nHero MotoCorp Limited:         HEROMOTOCO.NS\nTata Motors Limited:          TATAMOTORS.NS\nReliance Power Limited:          RPOWER.NS\nMahindra & Mahindra Limited:      M&M.NS\nInfosys Limited:          INFY.NS\nIndian Oil Corporation Limited:  IOC.NS\nNestle India Limited:          NESTLEIND.NS\nBosch Limited:             BOSCHLTD.NS\nGillette India Limited:          GILLETTE.BO\nBritannia Industries Limited:    BRITANNIA.BO\n"
                          
                          , bg='#A8D7FB',font = LARGEFONT, justify="left") 
         self.label1.place(x=85, y=210)
+        global label_1
+        label_1 = self.label1
         try:
             self.canvas_histroy.get_tk_widget().destroy()
             self.tb1.destroy()
         except:
-            pass
+        	print('pass canvas_histroy')
+        	pass
 
         try:
-            self.canvas_.get_tk_widget().destroy()
+            self.canvas_pred_graph.get_tk_widget().destroy()
             self.tb2.destroy()
         except:
-            pass
-
-        try:
-            self.label_me.destroy()
-        except:
-            pass
+        	print('pass canvas_pred_graph')
+        	pass
         
             
 
@@ -244,28 +264,23 @@ class Page1(tk.Frame):
         a = fig.add_subplot(111)
         a.plot(global_df.Close)
         try:
-            self.label1.destroy()
+            label_1.destroy()
         except:
-            pass
-
+        	print('pass label_1')
+        	pass
         try:
             self.canvas_pred_graph.get_tk_widget().destroy()
             self.tb2.destroy()
         except:
-            pass
+        	print('pass self.canvas_pred_graph')
+        	pass
         
         try:
-            self.canvas_history.get_tk_widget().destroy()
+            self.canvas_histroy.get_tk_widget().destroy()
             self.tb1.destroy()
         except:
-            pass
-
-
-        try:
-            self.label_me.destroy()
-        except:
-            pass
-        
+        	print('pass self.canvas_history')
+        	pass
 
         self.canvas_histroy = FigureCanvasTkAgg(fig, master=self)
         # self.canvas1.get_tk_widget().place_forget()
@@ -289,27 +304,20 @@ class Page1(tk.Frame):
         
         b = fig.add_subplot(111)
         b.plot(validData[['Close', 'Predictions']])
-        try:
-            self.label1.destroy()
-        except:
-            pass
         
         try:
             self.canvas_pred_graph.get_tk_widget().destroy()
             self.tb2.destroy()
         except:
-            pass
+        	print('pass canvas_pred_graph')
+        	pass
 
         try:
             self.canvas_histroy.get_tk_widget().destroy()
             self.tb1.destroy()
         except:
-            pass
-
-        try:
-            self.label_me.destroy()
-        except:
-            pass
+        	print('pass canvas_histroy')
+        	pass
         
         self.canvas_pred_graph = FigureCanvasTkAgg(fig, master=self)
 
