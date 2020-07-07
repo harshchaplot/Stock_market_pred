@@ -61,25 +61,18 @@ class StartPage(tk.Frame):
             tk.Frame.__init__(self, parent) 
             
             
-            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/Chinmay/wall2.png")
+            logo = tk.PhotoImage(file="C:/Users/Dell/Desktop/internship/summer_intern/wall2.png")
             BGlabel = tk.Label(self,image=logo)
             BGlabel.image = logo
             BGlabel.place(relwidth=1,relheight=1)
             
-            '''  
-            mycanvas = tk.Canvas(self, width = 200, height = 25)
-            mycanvas.create_rectangle(0, 0, 100, 40)
-            mycanvas.pack(side = "top", fill = "both", expand = True)
-              
-            text_canvas = mycanvas.create_text(10, 10, anchor = "nw")
-            mycanvas.itemconfig(text_canvas, text="Look no background! Thats new!")
-            '''
             
-            # label of frame Layout 2 
-            label = tk.Label(self, text ="Welcome", font = LARGEFONT) 
+            
+            #label of frame Layout 2 
+            #label = tk.Label(self, text ="Welcome", font = LARGEFONT) 
             
             # putting the grid in its place by using 
-            label.place(relx=0.43, rely=0.1) 
+            #label.place(relx=0.43, rely=0.1) 
             
             button_start = tk.Button(self, text= "Start",relief='flat',command= lambda: controller.show_frame(Page1), bg='#2A942A')
             button_start.place(relx=0.1, rely= 0.4, relwidth= 0.3, relheight= 0.15 )
@@ -152,14 +145,14 @@ class Page1(tk.Frame):
     
     def tickval(self, entry):
         try:
-            self.canvas1.get_tk_widget().destroy()
-            tb1.destroy()
+            self.canvas_histroy.get_tk_widget().destroy()
+            self.tb1.destroy()
         except:
             pass
 
         try:
-            self.canvas2.get_tk_widget().destroy()
-            tb2.destroy()
+            self.canvas_.get_tk_widget().destroy()
+            self.tb2.destroy()
         except:
             pass
 
@@ -167,6 +160,7 @@ class Page1(tk.Frame):
             self.label1.destroy()
         except:
             pass
+        
         name=entry
         print('Printing name')
         print(name)
@@ -180,6 +174,7 @@ class Page1(tk.Frame):
         global_df = myDict["df"]
         pred_price = myDict["pred_price"]
         global label_me
+        
         try:
             basic_label.destroy()
         except:
@@ -190,7 +185,7 @@ class Page1(tk.Frame):
             label = tk.Label(self, text="The predicted price for " + str(name) + " is: "+myString,bg='#A8D7FB', font = LARGEFONT)
             #self, text="The predicted price for " + str(name) + " is: ",bg='#A8D7FB', font = LARGEFONT
            # label.config(self.lower_frame, text="The predicted price for " + str(name) + " is: ")
-            label.place(relx=0.3, rely=0.8)
+            label.place(relx=0.35, rely=0.88)
             label_me = label
         else:
             label= tk.Label(self, text="Please enter the name of the company ticker", bg='#A8D7FB',font = LARGEFONT) 
@@ -205,19 +200,19 @@ class Page1(tk.Frame):
                          , bg='#A8D7FB',font = LARGEFONT, justify="left") 
         self.label1.place(x=85, y=210)
         try:
-            self.canvas1.get_tk_widget().destroy()
-            tb1.destroy()
+            self.canvas_histroy.get_tk_widget().destroy()
+            self.tb1.destroy()
         except:
             pass
 
         try:
-            self.canvas2.get_tk_widget().destroy()
-            tb2.destroy()
+            self.canvas_.get_tk_widget().destroy()
+            self.tb2.destroy()
         except:
             pass
 
         try:
-            label_me.destroy()
+            self.label_me.destroy()
         except:
             pass
         
@@ -241,6 +236,8 @@ class Page1(tk.Frame):
         
         
     def showHistory(self):
+        global tb1
+        global tb2
         print('Showing historical data')
 
         fig = Figure(figsize=(5,5))
@@ -252,32 +249,39 @@ class Page1(tk.Frame):
             pass
 
         try:
-            self.canvas2.get_tk_widget().destroy()
-            tb2.destroy()
+            self.canvas_pred_graph.get_tk_widget().destroy()
+            self.tb2.destroy()
         except:
             pass
+        
+        try:
+            self.canvas_history.get_tk_widget().destroy()
+            self.tb1.destroy()
+        except:
+            pass
+
 
         try:
-            label_me.destroy()
+            self.label_me.destroy()
         except:
             pass
         
 
-        self.canvas1 = FigureCanvasTkAgg(fig, master=self)
+        self.canvas_histroy = FigureCanvasTkAgg(fig, master=self)
         # self.canvas1.get_tk_widget().place_forget()
 
-        self.canvas1.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
-        self.canvas1.draw()
+        self.canvas_histroy.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        self.canvas_histroy.draw()
         
-        toolbar = NavigationToolbar2Tk(self.canvas1, self)
-        toolbar.update()
-        global tb1
-        tb1 = toolbar
-        self.canvas1._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
+        self.toolbar = NavigationToolbar2Tk(self.canvas_histroy, self)
+        self.toolbar.update()
+        
+        self.tb1 = self.toolbar
+        self.canvas_histroy._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
 
 
     def preds(self):
-        
+        global tb2
         print('Showing predictions')
         fig = Figure(figsize=(5,5))
         a = fig.add_subplot(111)
@@ -289,28 +293,34 @@ class Page1(tk.Frame):
             self.label1.destroy()
         except:
             pass
-
+        
         try:
-            self.canvas1.get_tk_widget().destroy()
-            tb1.destroy()
+            self.canvas_pred_graph.get_tk_widget().destroy()
+            self.tb2.destroy()
         except:
             pass
 
         try:
-            label_me.destroy()
+            self.canvas_histroy.get_tk_widget().destroy()
+            self.tb1.destroy()
+        except:
+            pass
+
+        try:
+            self.label_me.destroy()
         except:
             pass
         
-        self.canvas2 = FigureCanvasTkAgg(fig, master=self)
+        self.canvas_pred_graph = FigureCanvasTkAgg(fig, master=self)
 
-        self.canvas2.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
-        self.canvas2.draw()
+        self.canvas_pred_graph.get_tk_widget().place(x=80, y=207, relwidth=0.884, relheight=0.64)
+        self.canvas_pred_graph.draw()
         
-        toolbar2 = NavigationToolbar2Tk(self.canvas2, self)
-        toolbar2.update()
-        global tb2
-        tb2 = toolbar2
-        self.canvas2._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
+        self.toolbar2 = NavigationToolbar2Tk(self.canvas_pred_graph, self)
+        self.toolbar2.update()
+        
+        self.tb2 = self.toolbar2
+        self.canvas_pred_graph._tkcanvas.place(x=80, y=207, relwidth=0.884, relheight=0.6)
 
         #trainData['Close']
         #validData[['Close', 'Predictions']]
