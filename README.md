@@ -1,1 +1,1 @@
-# summer_intern
+# Stock Market Prediction with GUI
